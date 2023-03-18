@@ -19,6 +19,7 @@ package eu.cloudnetservice.driver.registry;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import dev.derklaro.aerogel.auto.Provides;
+import eu.cloudnetservice.driver.util.ConcurrencyUtil;
 import jakarta.inject.Singleton;
 import java.util.Collection;
 import java.util.Collections;
@@ -35,7 +36,7 @@ import lombok.NonNull;
 public class DefaultServiceRegistry implements ServiceRegistry {
 
   protected final Multimap<Class<?>, RegistryEntry<?>> providers = Multimaps.newMultimap(
-    new ConcurrentHashMap<>(),
+    ConcurrencyUtil.createConcurrentMap(4),
     ConcurrentHashMap::newKeySet);
 
   /**

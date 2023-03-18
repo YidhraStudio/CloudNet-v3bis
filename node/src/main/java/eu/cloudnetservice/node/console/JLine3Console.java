@@ -20,6 +20,7 @@ import dev.derklaro.aerogel.auto.Provides;
 import eu.cloudnetservice.common.concurrent.Task;
 import eu.cloudnetservice.common.log.LogManager;
 import eu.cloudnetservice.common.log.Logger;
+import eu.cloudnetservice.driver.util.ConcurrencyUtil;
 import eu.cloudnetservice.node.Node;
 import eu.cloudnetservice.node.console.animation.AbstractConsoleAnimation;
 import eu.cloudnetservice.node.console.handler.ConsoleInputHandler;
@@ -34,7 +35,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Lock;
@@ -66,10 +66,10 @@ public final class JLine3Console implements Console {
   private final boolean ansiSupported;
   private final Lock printLock = new ReentrantLock(true);
 
-  private final Map<UUID, ConsoleInputHandler> consoleInputHandler = new ConcurrentHashMap<>();
-  private final Map<UUID, ConsoleTabCompleteHandler> tabCompleteHandler = new ConcurrentHashMap<>();
+  private final Map<UUID, ConsoleInputHandler> consoleInputHandler = ConcurrencyUtil.createConcurrentMap();
+  private final Map<UUID, ConsoleTabCompleteHandler> tabCompleteHandler = ConcurrencyUtil.createConcurrentMap();
 
-  private final Map<UUID, AbstractConsoleAnimation> runningAnimations = new ConcurrentHashMap<>();
+  private final Map<UUID, AbstractConsoleAnimation> runningAnimations = ConcurrencyUtil.createConcurrentMap();
 
   private final ConsoleReadThread consoleReadThread = new ConsoleReadThread(this);
   private final ExecutorService animationThreadPool = Executors.newCachedThreadPool();

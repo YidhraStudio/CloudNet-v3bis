@@ -16,20 +16,20 @@
 
 package eu.cloudnetservice.ext.platforminject.runtime;
 
+import eu.cloudnetservice.driver.util.ConcurrencyUtil;
 import eu.cloudnetservice.ext.platforminject.api.PlatformPluginManager;
 import eu.cloudnetservice.ext.platforminject.api.spi.PlatformPluginManagerProvider;
 import eu.cloudnetservice.ext.platforminject.api.spi.PlatformPluginManagerRegistry;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ServiceLoader;
-import java.util.concurrent.ConcurrentHashMap;
 import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class DefaultPlatformPluginManagerRegistry implements PlatformPluginManagerRegistry {
 
   private final Map<String, PlatformPluginManagerProvider<?, ?>> registeredManagers
-    = new ConcurrentHashMap<>(16, 0.9f, 1);
+    = ConcurrencyUtil.createConcurrentMap();
 
   public DefaultPlatformPluginManagerRegistry() {
     var loader = ServiceLoader.load(PlatformPluginManagerProvider.class, this.getClass().getClassLoader());

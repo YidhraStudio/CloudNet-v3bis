@@ -41,6 +41,7 @@ import eu.cloudnetservice.driver.network.rpc.defaults.object.serializers.UUIDObj
 import eu.cloudnetservice.driver.network.rpc.exception.MissingObjectSerializerException;
 import eu.cloudnetservice.driver.network.rpc.object.ObjectMapper;
 import eu.cloudnetservice.driver.network.rpc.object.ObjectSerializer;
+import eu.cloudnetservice.driver.util.ConcurrencyUtil;
 import jakarta.inject.Singleton;
 import java.lang.reflect.Type;
 import java.nio.file.Path;
@@ -146,7 +147,7 @@ public class DefaultObjectMapper implements ObjectMapper {
     DEFAULT_MAPPER = new DefaultObjectMapper();
   }
 
-  private final Map<Type, ObjectSerializer<?>> registeredSerializers = new ConcurrentHashMap<>();
+  private final Map<Type, ObjectSerializer<?>> registeredSerializers = ConcurrencyUtil.createConcurrentMap();
   private final LoadingCache<Type, Collection<Pair<Type, Type>>> typeCache = Caffeine.newBuilder()
     .expireAfterAccess(Duration.ofDays(1))
     .scheduler(Scheduler.systemScheduler())

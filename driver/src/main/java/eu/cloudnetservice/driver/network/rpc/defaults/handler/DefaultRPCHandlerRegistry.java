@@ -19,10 +19,10 @@ package eu.cloudnetservice.driver.network.rpc.defaults.handler;
 import dev.derklaro.aerogel.auto.Provides;
 import eu.cloudnetservice.driver.network.rpc.RPCHandler;
 import eu.cloudnetservice.driver.network.rpc.RPCHandlerRegistry;
+import eu.cloudnetservice.driver.util.ConcurrencyUtil;
 import jakarta.inject.Singleton;
 import java.util.Collections;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -36,7 +36,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 @Provides(RPCHandlerRegistry.class)
 public class DefaultRPCHandlerRegistry implements RPCHandlerRegistry {
 
-  protected final Map<String, RPCHandler> handlers = new ConcurrentHashMap<>();
+  protected final Map<String, RPCHandler> handlers = ConcurrencyUtil.createConcurrentMap(4);
 
   /**
    * {@inheritDoc}

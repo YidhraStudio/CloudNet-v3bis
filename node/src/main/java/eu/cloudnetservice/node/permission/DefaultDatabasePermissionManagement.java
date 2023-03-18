@@ -26,6 +26,7 @@ import eu.cloudnetservice.driver.permission.DefaultPermissionManagement;
 import eu.cloudnetservice.driver.permission.PermissionGroup;
 import eu.cloudnetservice.driver.permission.PermissionManagement;
 import eu.cloudnetservice.driver.permission.PermissionUser;
+import eu.cloudnetservice.driver.util.ConcurrencyUtil;
 import eu.cloudnetservice.node.cluster.sync.DataSyncHandler;
 import eu.cloudnetservice.node.cluster.sync.DataSyncRegistry;
 import eu.cloudnetservice.node.command.CommandProvider;
@@ -47,7 +48,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
@@ -93,7 +93,7 @@ public class DefaultDatabasePermissionManagement
     this.commandProvider = commandProvider;
     this.handlerRegistry = handlerRegistry;
     this.databaseProvider = databaseProvider;
-    this.groups = new ConcurrentHashMap<>();
+    this.groups = ConcurrencyUtil.createConcurrentMap(4);
 
     // sync permission groups into the cluster
     dataSyncRegistry.registerHandler(DataSyncHandler.<PermissionGroup>builder()

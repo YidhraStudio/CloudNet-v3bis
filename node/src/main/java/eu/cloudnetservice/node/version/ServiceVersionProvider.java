@@ -28,6 +28,7 @@ import eu.cloudnetservice.common.log.LogManager;
 import eu.cloudnetservice.common.log.Logger;
 import eu.cloudnetservice.driver.event.EventManager;
 import eu.cloudnetservice.driver.service.ServiceEnvironmentType;
+import eu.cloudnetservice.driver.util.ConcurrencyUtil;
 import eu.cloudnetservice.node.console.animation.progressbar.ConsoleProgressWrappers;
 import eu.cloudnetservice.node.template.listener.TemplatePrepareListener;
 import eu.cloudnetservice.node.version.execute.InstallStep;
@@ -47,7 +48,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import kong.unirest.Unirest;
 import lombok.NonNull;
@@ -67,8 +67,8 @@ public class ServiceVersionProvider {
   private static final Type COL_SER_VERSION = getParameterized(Collection.class, ServiceVersionType.class).getType();
   private static final Type COL_ENV_TYPE = getParameterized(Collection.class, ServiceEnvironmentType.class).getType();
 
-  private final Map<String, ServiceVersionType> serviceVersionTypes = new ConcurrentHashMap<>();
-  private final Map<String, ServiceEnvironmentType> serviceEnvironmentTypes = new ConcurrentHashMap<>();
+  private final Map<String, ServiceVersionType> serviceVersionTypes = ConcurrencyUtil.createConcurrentMap(4);
+  private final Map<String, ServiceEnvironmentType> serviceEnvironmentTypes = ConcurrencyUtil.createConcurrentMap(4);
 
   private final ConsoleProgressWrappers consoleProgressWrappers;
 

@@ -19,13 +19,13 @@ package eu.cloudnetservice.ext.platforminject.api.defaults;
 import dev.derklaro.aerogel.Injector;
 import dev.derklaro.aerogel.SpecifiedInjector;
 import eu.cloudnetservice.driver.inject.InjectionLayer;
+import eu.cloudnetservice.driver.util.ConcurrencyUtil;
 import eu.cloudnetservice.ext.platforminject.api.PlatformEntrypoint;
 import eu.cloudnetservice.ext.platforminject.api.PlatformPluginInfo;
 import eu.cloudnetservice.ext.platforminject.api.PlatformPluginManager;
 import eu.cloudnetservice.ext.platforminject.api.inject.BindingsInstaller;
 import java.util.Collection;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,7 +39,7 @@ public abstract class BasePlatformPluginManager<I, T> implements PlatformPluginM
   private final Function<T, I> idExtractor;
   private final Function<T, Object> mainClassExtractor;
 
-  private final Map<I, PlatformPluginInfo<I, T, ?>> constructedPlugins = new ConcurrentHashMap<>(16, 0.9f, 1);
+  private final Map<I, PlatformPluginInfo<I, T, ?>> constructedPlugins = ConcurrencyUtil.createConcurrentMap();
 
   protected BasePlatformPluginManager(
     @NonNull Function<T, I> idExtractor,

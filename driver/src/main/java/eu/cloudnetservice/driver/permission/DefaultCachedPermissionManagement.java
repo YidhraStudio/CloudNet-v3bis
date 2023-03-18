@@ -19,9 +19,9 @@ package eu.cloudnetservice.driver.permission;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.RemovalCause;
+import eu.cloudnetservice.driver.util.ConcurrencyUtil;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.NonNull;
@@ -38,8 +38,8 @@ import org.jetbrains.annotations.Nullable;
 public abstract class DefaultCachedPermissionManagement extends DefaultPermissionManagement
   implements CachedPermissionManagement {
 
-  protected final Map<UUID, AtomicInteger> permissionUserLocks = new ConcurrentHashMap<>();
-  protected final Map<String, AtomicInteger> permissionGroupLocks = new ConcurrentHashMap<>();
+  protected final Map<UUID, AtomicInteger> permissionUserLocks = ConcurrencyUtil.createConcurrentMap();
+  protected final Map<String, AtomicInteger> permissionGroupLocks = ConcurrencyUtil.createConcurrentMap();
 
   // holds all cached permission users and tries to unload them after 5 minutes of inactivity
   // will be prevented if a lock is known for the given player object, for example when connected

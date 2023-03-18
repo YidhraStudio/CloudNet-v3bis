@@ -27,6 +27,7 @@ import eu.cloudnetservice.driver.network.http.annotation.parser.HttpAnnotationPa
 import eu.cloudnetservice.driver.network.netty.NettySslServer;
 import eu.cloudnetservice.driver.network.netty.NettyUtil;
 import eu.cloudnetservice.driver.network.ssl.SSLConfiguration;
+import eu.cloudnetservice.driver.util.ConcurrencyUtil;
 import io.netty5.bootstrap.ServerBootstrap;
 import io.netty5.channel.ChannelOption;
 import io.netty5.channel.EventLoopGroup;
@@ -48,7 +49,7 @@ public class NettyHttpServer extends NettySslServer implements HttpServer {
 
   private static final Logger LOGGER = LogManager.logger(NettyHttpServer.class);
 
-  protected final Map<HostAndPort, Future<Void>> channelFutures = new ConcurrentHashMap<>();
+  protected final Map<HostAndPort, Future<Void>> channelFutures = ConcurrencyUtil.createConcurrentMap();
   protected final Collection<HttpHandlerEntry> registeredHandlers = ConcurrentHashMap.newKeySet();
 
   protected final EventLoopGroup bossGroup = NettyUtil.newEventLoopGroup(1);

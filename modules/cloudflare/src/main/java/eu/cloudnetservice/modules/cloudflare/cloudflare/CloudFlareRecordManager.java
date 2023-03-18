@@ -21,6 +21,7 @@ import com.google.common.collect.Multimaps;
 import eu.cloudnetservice.common.document.gson.JsonDocument;
 import eu.cloudnetservice.common.log.LogManager;
 import eu.cloudnetservice.common.log.Logger;
+import eu.cloudnetservice.driver.util.ConcurrencyUtil;
 import eu.cloudnetservice.modules.cloudflare.config.CloudflareConfigurationEntry;
 import eu.cloudnetservice.modules.cloudflare.dns.DnsRecord;
 import io.leangen.geantyref.TypeFactory;
@@ -50,7 +51,7 @@ public class CloudFlareRecordManager {
   protected static final Logger LOGGER = LogManager.logger(CloudFlareRecordManager.class);
 
   protected final Multimap<UUID, DnsRecordDetail> createdRecords = Multimaps.newMultimap(
-    new ConcurrentHashMap<>(),
+    ConcurrencyUtil.createConcurrentMap(),
     ConcurrentHashMap::newKeySet);
 
   public @NonNull CompletableFuture<List<DnsRecord>> listRecords(@NonNull CloudflareConfigurationEntry configuration) {

@@ -31,6 +31,7 @@ import eu.cloudnetservice.driver.network.protocol.Packet;
 import eu.cloudnetservice.driver.network.protocol.PacketListenerRegistry;
 import eu.cloudnetservice.driver.network.protocol.defaults.DefaultPacketListenerRegistry;
 import eu.cloudnetservice.driver.network.ssl.SSLConfiguration;
+import eu.cloudnetservice.driver.util.ConcurrencyUtil;
 import io.netty5.bootstrap.ServerBootstrap;
 import io.netty5.channel.ChannelOption;
 import io.netty5.channel.EventLoopGroup;
@@ -61,7 +62,7 @@ public class NettyNetworkServer extends NettySslServer implements DefaultNetwork
   protected final EventLoopGroup workerEventLoopGroup = NettyUtil.newEventLoopGroup(0);
 
   protected final Collection<NetworkChannel> channels = ConcurrentHashMap.newKeySet();
-  protected final Map<HostAndPort, Future<Void>> channelFutures = new ConcurrentHashMap<>();
+  protected final Map<HostAndPort, Future<Void>> channelFutures = ConcurrencyUtil.createConcurrentMap();
 
   protected final PacketListenerRegistry packetRegistry = new DefaultPacketListenerRegistry();
 

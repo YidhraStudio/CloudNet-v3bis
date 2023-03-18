@@ -41,6 +41,7 @@ import eu.cloudnetservice.driver.service.ServiceEnvironmentType;
 import eu.cloudnetservice.driver.service.ServiceInfoSnapshot;
 import eu.cloudnetservice.driver.service.ServiceLifeCycle;
 import eu.cloudnetservice.driver.service.ServiceTask;
+import eu.cloudnetservice.driver.util.ConcurrencyUtil;
 import eu.cloudnetservice.node.TickLoop;
 import eu.cloudnetservice.node.cluster.NodeServer;
 import eu.cloudnetservice.node.cluster.NodeServerProvider;
@@ -103,7 +104,7 @@ public class DefaultCloudServiceManager implements CloudServiceManager {
     .build();
 
   protected final Map<String, LocalCloudServiceFactory> cloudServiceFactories = new ConcurrentHashMap<>();
-  protected final Map<ServiceEnvironmentType, ServiceConfigurationPreparer> preparers = new ConcurrentHashMap<>();
+  protected final Map<ServiceEnvironmentType, ServiceConfigurationPreparer> preparers = ConcurrencyUtil.createConcurrentMap(4);
 
   @Inject
   public DefaultCloudServiceManager(

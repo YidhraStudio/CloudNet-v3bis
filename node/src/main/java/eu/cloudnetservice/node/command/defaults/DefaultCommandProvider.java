@@ -30,6 +30,7 @@ import eu.cloudnetservice.common.concurrent.Task;
 import eu.cloudnetservice.common.language.I18n;
 import eu.cloudnetservice.driver.command.CommandInfo;
 import eu.cloudnetservice.driver.inject.InjectionLayer;
+import eu.cloudnetservice.driver.util.ConcurrencyUtil;
 import eu.cloudnetservice.node.command.CommandProvider;
 import eu.cloudnetservice.node.command.annotation.CommandAlias;
 import eu.cloudnetservice.node.command.annotation.Description;
@@ -143,7 +144,9 @@ public final class DefaultCommandProvider implements CommandProvider {
 
     // internal handling
     this.exceptionHandler = exceptionHandler;
-    this.registeredCommands = Multimaps.newSetMultimap(new ConcurrentHashMap<>(), ConcurrentHashMap::newKeySet);
+    this.registeredCommands = Multimaps.newSetMultimap(
+      ConcurrencyUtil.createConcurrentMap(4),
+      ConcurrentHashMap::newKeySet);
 
     // register the command confirmation handling
     this.registerCommandConfirmation();

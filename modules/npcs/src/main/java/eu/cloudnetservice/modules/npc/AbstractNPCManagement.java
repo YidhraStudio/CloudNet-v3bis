@@ -19,11 +19,11 @@ package eu.cloudnetservice.modules.npc;
 import eu.cloudnetservice.driver.channel.ChannelMessage;
 import eu.cloudnetservice.driver.event.EventManager;
 import eu.cloudnetservice.driver.registry.ServiceRegistry;
+import eu.cloudnetservice.driver.util.ConcurrencyUtil;
 import eu.cloudnetservice.modules.bridge.WorldPosition;
 import eu.cloudnetservice.modules.npc.configuration.NPCConfiguration;
 import java.util.Collection;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,7 +36,7 @@ public abstract class AbstractNPCManagement implements NPCManagement {
   protected static final String NPC_BULK_DELETE = "npcs_npc_bulk_deleted";
   protected static final String NPC_CONFIGURATION_UPDATE = "npcs_npc_config_update";
 
-  protected final Map<WorldPosition, NPC> npcs = new ConcurrentHashMap<>();
+  protected final Map<WorldPosition, NPC> npcs = ConcurrencyUtil.createConcurrentMap(4);
   protected NPCConfiguration npcConfiguration;
 
   public AbstractNPCManagement(@Nullable NPCConfiguration npcConfiguration, @NonNull EventManager eventManager) {

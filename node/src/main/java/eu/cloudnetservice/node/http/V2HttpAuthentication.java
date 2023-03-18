@@ -23,6 +23,7 @@ import eu.cloudnetservice.driver.ComponentInfo;
 import eu.cloudnetservice.driver.network.http.HttpRequest;
 import eu.cloudnetservice.driver.permission.PermissionManagement;
 import eu.cloudnetservice.driver.permission.PermissionUser;
+import eu.cloudnetservice.driver.util.ConcurrencyUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
@@ -39,7 +40,6 @@ import java.util.Base64;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 import lombok.NonNull;
@@ -63,7 +63,7 @@ public class V2HttpAuthentication {
     "No matching user for provided basic login credentials");
 
   protected final PermissionManagement permissionManagement;
-  protected final Map<String, HttpSession> sessions = new ConcurrentHashMap<>();
+  protected final Map<String, HttpSession> sessions = ConcurrencyUtil.createConcurrentMap(4);
 
   protected final Key signingKey;
   protected final String jwtIssuer;

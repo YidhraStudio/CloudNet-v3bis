@@ -22,6 +22,7 @@ import eu.cloudnetservice.common.language.I18n;
 import eu.cloudnetservice.common.log.LogManager;
 import eu.cloudnetservice.common.log.Logger;
 import eu.cloudnetservice.driver.network.buffer.DataBuf;
+import eu.cloudnetservice.driver.util.ConcurrencyUtil;
 import eu.cloudnetservice.node.cluster.sync.prettyprint.GulfHelper;
 import eu.cloudnetservice.node.cluster.sync.prettyprint.GulfPrettyPrint;
 import eu.cloudnetservice.node.console.Console;
@@ -30,7 +31,6 @@ import jakarta.inject.Singleton;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,7 +42,7 @@ public class DefaultDataSyncRegistry implements DataSyncRegistry {
   private static final Logger LOGGER = LogManager.logger(DefaultDataSyncRegistry.class);
 
   private final Console console;
-  private final Map<String, DataSyncHandler<?>> handlers = new ConcurrentHashMap<>();
+  private final Map<String, DataSyncHandler<?>> handlers = ConcurrencyUtil.createConcurrentMap(4);
 
   @Inject
   public DefaultDataSyncRegistry(@NonNull Console console) {

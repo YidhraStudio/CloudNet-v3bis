@@ -21,8 +21,8 @@ import eu.cloudnetservice.driver.network.chunk.ChunkedPacketHandler;
 import eu.cloudnetservice.driver.network.chunk.data.ChunkSessionInformation;
 import eu.cloudnetservice.driver.network.protocol.Packet;
 import eu.cloudnetservice.driver.network.protocol.PacketListener;
+import eu.cloudnetservice.driver.util.ConcurrencyUtil;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import lombok.NonNull;
 
@@ -34,7 +34,7 @@ import lombok.NonNull;
 public class ChunkedPacketListener implements PacketListener {
 
   private final Function<ChunkSessionInformation, ChunkedPacketHandler> handlerFactory;
-  private final Map<ChunkSessionInformation, ChunkedPacketHandler> runningSessions = new ConcurrentHashMap<>();
+  private final Map<ChunkSessionInformation, ChunkedPacketHandler> runningSessions = ConcurrencyUtil.createConcurrentMap(4);
 
   /**
    * Creates a new packet listener instance.
